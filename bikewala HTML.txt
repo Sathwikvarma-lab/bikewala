@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BikeWala</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="BikeWala Logo" style="height: 60px; vertical-align: middle;">
+    <h1 style="display: inline-block; margin-left: 10px;">BikeWala</h1>
+    <p>Book your bike ride instantly!</p>
+  </header>
+
+  <div class="container">
+    <div class="booking-form">
+      <h2>Book a Ride</h2>
+      <button onclick="getLocation('pickup')">Get Pickup Location</button>
+      <input type="text" id="pickup" placeholder="Pickup Location">
+      <button onclick="getLocation('drop')">Get Drop Location</button>
+      <input type="text" id="drop" placeholder="Drop Location">
+      <button onclick="bookRide()">Book Now</button>
+    </div>
+
+    <div class="wallet">
+      <h2>Wallet</h2>
+      <p><strong>Balance:</strong> ₹<span id="walletBalance">0</span></p>
+      <button onclick="withdrawMoney()">Withdraw</button>
+    </div>
+
+    <div class="registration-form">
+      <h2>Employee Registration</h2>
+      <input type="text" id="empName" placeholder="Full Name">
+      <input type="text" id="empLocation" placeholder="Current Location (Mandal/District)">
+      <input type="text" id="empRC" placeholder="Vehicle RC Number">
+      <input type="text" id="empLicense" placeholder="License Number">
+      <button onclick="registerEmployee()">Register</button>
+    </div>
+
+    <div class="ride-info" id="rideInfo"></div>
+    <div class="emp-info" id="empInfo"></div>
+    <div class="note">
+      <p><strong>Note:</strong> The app owner takes ₹4 per ride as service fee.</p>
+      <p><strong>Service Area:</strong> BikeWala currently operates only in major locations across India (Mandals & Districts).</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
