@@ -1,0 +1,80 @@
+function bookRide() {
+  const pickup = document.getElementById('pickup').value;
+  const drop = document.getElementById('drop').value;
+  const rideInfo = document.getElementById('rideInfo');
+  const wallet = document.getElementById('walletBalance');
+  let balance = parseInt(wallet.innerText);
+
+  if (!pickup || !drop) {
+    alert('Please enter both pickup and drop locations.');
+    return;
+  }
+
+  const service = new google.maps.DistanceMatrixService();
+
+  service.getDistanceMatrix(
+    {
+      origins: [pickup],
+      destinations: [drop],
+      travelMode: 'DRIVING',
+      unitSystem: google.maps.UnitSystem.METRIC,
+    },
+    function (response, status) {
+      if (status === 'OK') {
+        const element = response.rows[0].elements[0];
+
+        if (element.status === "OK") {
+          const distanceText = element.distance.text;
+          const distanceKm = element.distance.value / 1000;
+          const roundedKm = Math.ceil(distanceKm);
+
+          let fare = 0;
+          if (roundedKm === 1) {
+            fare = 35;
+          } else if (roundedKm === 2) {
+            fare = 60;
+          } else {
+            fare = 60 + (roundedKm - 2) * 25;
+          }
+
+          fare += 4; // ₹4 service fee
+
+          if (balance >= fare) {
+            balance -= fare;
+            wallet.innerText = balance;
+
+            rideInfo.innerHTML = `
+              <h3>Ride Confirmed!</h3>
+              <p><strong>Pickup:</strong> ${pickup}</p>
+              <p><strong>Drop:</strong> ${drop}</p>
+              <p><strong>Distance:</strong> ${distanceText}</p>
+              <p><strong>Total Fare:</strong> ₹${fare} (Includes ₹4 service fee)</p>
+            `;
+          } else {
+            alert('Insufficient wallet balance to book this ride.');
+          }
+        } else {
+          alert("Could not calculate distance for the selected locations.");
+        }
+      } else {
+        alert("Distance Matrix API failed due to: " + status);
+      }
+    }
+  );
+}
+
+function withdrawMoney() {
+  const wallet = document.getElementById('walletBalance');
+  let balance = parseInt(wallet.innerText);
+
+  if (balance < 500) {
+    alert("Minimum withdrawable balance is ₹500. Earn more to withdraw.");
+    return;
+  }
+
+  const confirmWithdraw = confirm(Do you want to withdraw ₹${balance}?);
+  if (confirmWithdraw) {
+    alert(₹${balance} withdrawn successfully.);
+    wallet.innerText = 0;
+  }
+}
